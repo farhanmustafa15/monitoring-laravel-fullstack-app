@@ -1,24 +1,13 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@extends('components.header')
 
-<head>
-    <meta charset="utf-8">
-    {{-- Tailwindcss@3.4.1 --}}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite(['resources/css/app.css','resources/js/app.js'])
-    <title>Login | Monitoring</title>
+@section('header')
+@endsection
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+<body class="w-[1440px] h-full grid grid-cols-mentoring-layout bg-[#F8FAFB] mx-auto ">
 
-    <!-- Styles -->
-
-</head>
-
-<body class="bg-black">
-    <p class="text-6xl font-bold text-white">@yield('title')</p>
-    @yield('content')
+    @include('components.sidebar')
+    @yield('layout')
+    <script src="{{ asset('js/graph.js') }}"></script>
 </body>
 
 </html>

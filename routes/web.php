@@ -12,11 +12,16 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-});
-
 Route::get('/auth/login', function () {
     return view('auth.login');
 });
+
+Route::get('/admin/dashboard', function () {
+    return view('dashboard.dashboard');
+});
+
+Route::get('/admin/history', function () {
+    return view('history.history');
+});
+
+

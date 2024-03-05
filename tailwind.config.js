@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
@@ -13,7 +14,10 @@ export default {
                 "white-color": "#FCFCFC",
             },
             gridTemplateColumns: {
-                "mentoring-layout": "273px 1167px",
+                // 1440px
+                "mentoring-layout": "250px 1100px",
+                // "xl-mentoring-layout": "273px 1167px ",
+                // 1280px
             },
         },
     },

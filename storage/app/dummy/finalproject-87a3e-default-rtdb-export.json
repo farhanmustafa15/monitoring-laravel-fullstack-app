@@ -1,0 +1,16 @@
+{
+  "RumahJamur": {
+    "SetData": {
+      "avgh": 55,
+      "avgt": 27
+    }
+  },
+  "TugasAkhir": {
+    "SetData": {
+      "avgh": 52,
+      "avgt": 28,
+      "fanstate_default": "OFF",
+      "pumpstate_default": "ON"
+    }
+  }
+}

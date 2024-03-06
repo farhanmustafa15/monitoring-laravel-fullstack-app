@@ -1,8 +1,6 @@
 @yield('not-ready-responsive')
-{{-- <div
-    className='w-full h-full flex flex-col items-center justify-center my-auto p-5 lg:p-10 xl:hidden'> --}}
-    <p class="text-black dark:text-white-color text-center">[PERHATIAN]</p>
-    <p class="text-black dark:text-white-color text-center">Harap gunakan perangkat desktop alih-alih menggunakan
-        ponsel cerdas, tablet, atau desktop kecil untuk tujuan
+<div class="xl:hidden bg-gray-800 text-black dark:text-white-color text-center flex flex-col h-full w-full justify-center items-center gap-y-4">
+    <p class="font-bold text-black dark:text-white-color text-center">[PERHATIAN]</p>
+    <p class="font-bold text-black dark:text-white-color text-center">Harap gunakan perangkat desktop agar
         pengalaman pengguna yang terbaik!</p>
-{{-- </div> --}}
+</div>

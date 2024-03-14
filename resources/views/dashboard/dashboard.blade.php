@@ -1,10 +1,42 @@
 @extends('layout')
 
 @section('layout')
-    <div class="flex flex-col gap-y-11">
-        {{-- graph --}}
+    <div class="flex flex-col">
 
-        <div class=" p-4 md:p-6">
+        {{-- choose dbs --}}
+        <div class="p-4 md:p-6 flex justify-end">
+
+            <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                type="button">Pilih Database<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 4 4 4-4" />
+                </svg>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div id="dropdown"
+                class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                    <li>
+                        <a href="#"
+                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                            Rumah
+                            Jamur</a>
+                    </li>
+                    <li>
+                        <a href="#"
+                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tugas
+                            Akhir</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        {{-- graph --}}
+        <div class="p-4 md:p-6 mt-11">
             <div class="w-full h-fit rounded-lg">
                 <div class="flex justify-between">
                     <div>
@@ -81,7 +113,7 @@
             </div>
         </div>
 
-        <div class="flex justify-between gap-20 p-4 md:p-6">
+        <div class="flex justify-between gap-20 p-4 md:p-6 mt-11">
             {{-- col 1 --}}
             <div class="w-[350px] flex flex-col gap-y-10">
 
@@ -93,11 +125,12 @@
                             <img src="{{ asset('assets/dashboard/temperatur-up.svg') }}" alt="">
                             <div class="flex flex-col justify-center w-full">
                                 <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">suhu</p>
-                                <h5 class=" text-black dark:text-white-color text-xl font-bold">@foreach ($tugasAkhirData as $key => $value)
-                                    @if ($key === 'avgt')
-                                       {{ $value }}&#8451;
-                                    @endif
-                                @endforeach
+                                <h5 class=" text-black dark:text-white-color text-xl font-bold">
+                                    @foreach ($tugasAkhirData as $key => $value)
+                                        @if ($key === 'avgt')
+                                            {{ $value }}&#8451;
+                                        @endif
+                                    @endforeach
                                 </h5>
                             </div>
                         </div>
@@ -115,11 +148,11 @@
                                 <h5 class="text-xl font-bold text-black dark:text-white-color">
                                     @foreach ($tugasAkhirData as $key => $value)
                                         @if ($key === 'avgh')
-                                           {{ $value }}&#x25;
+                                            {{ $value }}&#x25;
                                         @endif
                                     @endforeach
                                 </h5>
-                                
+
                             </div>
 
                         </div>
@@ -145,63 +178,90 @@
                             <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
-                                        Product name
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            Suhu
+                                        </p>
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Color
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            Kelembapan
+                                        </p>
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Category
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Price
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            Hasil
+                                        </p>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="bg-white dark:bg-gray-800">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Apple MacBook Pro 17"
-                                    </th>
                                     <td class="px-6 py-4">
-                                        Silver
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            25
+                                        </p>
+                                        </th>
+                                    <td class="px-6 py-4">
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            30
+                                        </p>
                                     </td>
                                     <td class="px-6 py-4">
-                                        Laptop
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $2999
-                                    </td>
-                                </tr>
-                                <tr class="bg-white dark:bg-gray-800">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Microsoft Surface Pro
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        White
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Laptop PC
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        $1999
+                                        <div class="bg-blue-600 rounded-full">
+                                            <p
+                                                class="text-center font-medium text-white-color whitespace-nowrap dark:text-white-color">
+                                                Rendah
+                                            </p>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr class="bg-white dark:bg-gray-800">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Magic Mouse 2
-                                    </th>
                                     <td class="px-6 py-4">
-                                        Black
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            25
+                                        </p>
+                                        </th>
+                                    <td class="px-6 py-4">
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            30
+                                        </p>
                                     </td>
                                     <td class="px-6 py-4">
-                                        Accessories
+                                        <div class="bg-green-600 rounded-full">
+                                            <p
+                                                class="text-center font-medium text-white-color whitespace-nowrap dark:text-white-color">
+                                                Normal
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white dark:bg-gray-800">
+                                    <td class="px-6 py-4">
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            25
+                                        </p>
+                                        </th>
+                                    <td class="px-6 py-4">
+                                        <p
+                                            class="text-center font-medium text-gray-900 whitespace-nowrap dark:text-white-color">
+                                            30
+                                        </p>
                                     </td>
                                     <td class="px-6 py-4">
-                                        $99
+                                        <div class="bg-red-600 rounded-full">
+                                            <p
+                                                class="text-center font-medium text-white-color whitespace-nowrap dark:text-white-color">
+                                                Tinggi
+                                            </p>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

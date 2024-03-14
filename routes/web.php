@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FirebaseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,12 +17,8 @@ Route::get('/auth/login', function () {
     return view('auth.login');
 });
 
-Route::get('/admin/dashboard', function () {
-    return view('dashboard.dashboard');
-});
-
+Route::get('/admin/dashboard', [FirebaseController::class, 'showDashboard']);
 Route::get('/admin/history', function () {
     return view('history.history');
 });
-
 

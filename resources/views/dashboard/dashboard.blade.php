@@ -131,7 +131,7 @@
             {{-- col 2 --}}
             {{-- history --}}
             <div class="flex flex-col w-full gap-y-5">
-                <h1 class="text-2xl font-bold text-black dark:text-white-color">Recent</h1>
+                <h1 class="text-2xl font-bold text-black dark:text-white-color">Latest</h1>
                 {{-- table --}}
 
 

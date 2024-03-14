@@ -22,7 +22,8 @@
                     </div>
                 </div>
                 <div id="area-chart" class="bg-white dark:bg-gray-800"></div>
-                <div class="bg-white dark:bg-gray-800 grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+                <div
+                    class="bg-white dark:bg-gray-800 grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
                     <div class="flex justify-between items-center pt-5">
                         <!-- Button -->
                         <button id="dropdownDefaultButton" data-dropdown-toggle="lastDaysdropdown"
@@ -30,8 +31,8 @@
                             class="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 text-center inline-flex items-center dark:hover:text-whbg-white-color"
                             type="button">
                             Last 7 days
-                            <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 10 6">
+                            <svg class="w-2.5 m-2.5 ms-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 10 6">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="m1 1 4 4 4-4" />
                             </svg>
@@ -39,7 +40,8 @@
                         <!-- Dropdown menu -->
                         <div id="lastDaysdropdown"
                             class="z-10 hidden bg-white-color divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                aria-labelledby="dropdownDefaultButton">
                                 <li>
                                     <a href="#"
                                         class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-whbg-white-color">Yesterday</a>
@@ -68,8 +70,8 @@
                         <a href="#"
                             class="uppercase text-sm font-semibold inline-flex items-center rounded-lg text-blue-600 hover:text-blue-700 dark:hover:text-blue-500  hover:bg-gray-100 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 px-3 py-2">
                             Users Report
-                            <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 6 10">
+                            <svg class="w-2.5 h-2.5 ms-1.5 rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="m1 9 4-4-4-4" />
                             </svg>
@@ -84,29 +86,42 @@
             <div class="w-[350px] flex flex-col gap-y-10">
 
                 <div class="flex flex-col w-full gap-y-5">
-                    <h5 class="text-2xl font-bold text-black dark:text-white-color">Realtime</h5>
+                    <h5 class="text-2xl font-bold text-black dark:text-white-color">Suhu</h5>
                     <div
                         class="w-full h-fit bg-white-color dark:bg-gray-800 py-9 px-5 rounded-2xl border dark:border-gray-600">
                         <div class="flex gap-3 justify-center items-center">
                             <img src="{{ asset('assets/dashboard/temperatur-up.svg') }}" alt="">
                             <div class="flex flex-col justify-center w-full">
                                 <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">suhu</p>
-                                <h5 class=" text-black dark:text-white-color text-xl font-bold">25&#8451</h5>
+                                <h5 class=" text-black dark:text-white-color text-xl font-bold">@foreach ($tugasAkhirData as $key => $value)
+                                    @if ($key === 'avgt')
+                                       {{ $value }}&#8451;
+                                    @endif
+                                @endforeach
+                                </h5>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex flex-col w-full gap-y-5">
-                    <h5 class="text-2xl font-bold text-black dark:text-white-color">Normal</h5>
+                    <h5 class="text-2xl font-bold text-black dark:text-white-color">Kelembapan</h5>
                     <div
                         class="w-full h-fit bg-white-color dark:bg-gray-800 py-9 px-5 rounded-2xl border dark:border-gray-600">
                         <div class="flex gap-3 justify-center items-center">
                             <img src="{{ asset('assets/dashboard/temperatur-up.svg') }}" alt="">
                             <div class="flex flex-col justify-center w-full">
-                                <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">suhu</p>
-                                <h5 class="text-xl font-bold text-black dark:text-white-color">24&#8451 - 25&#8451</h5>
+                                <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">Kelembapan</p>
+                                <h5 class="text-xl font-bold text-black dark:text-white-color">
+                                    @foreach ($tugasAkhirData as $key => $value)
+                                        @if ($key === 'avgh')
+                                           {{ $value }}&#x25;
+                                        @endif
+                                    @endforeach
+                                </h5>
+                                
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -121,11 +136,12 @@
 
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-                  
+
 
 
                     <div class="relative overflow-x-auto ">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
+                        <table
+                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
                             <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">

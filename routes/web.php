@@ -13,12 +13,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::group(['prefix' => 'admin/dashboard'], function () {
+    Route::get('/{dataType}', [FirebaseController::class, 'showDashboard']);
+});
+
 Route::get('/auth/login', function () {
     return view('auth.login');
 });
 
-Route::get('/admin/dashboard', [FirebaseController::class, 'showDashboard']);
 Route::get('/admin/history', function () {
     return view('history.history');
 });
-

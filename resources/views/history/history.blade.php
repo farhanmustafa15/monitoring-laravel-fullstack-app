@@ -2,9 +2,10 @@
 
 @section('layout')
     {{-- history --}}
-    <div class="grid grid-cols-2 gap-x-8 p-4 md:p-6">
+    <div class="pt-8 mx-6 grid grid-cols-2 gap-10 w-screen h-screen">
 
-        <div class="flex flex-col w-full gap-y-5">
+        {{-- 1 --}}
+        <div class="w-full flex flex-col gap-y-5">
             <h1 class="text-2xl font-bold text-black dark:text-white-color">Suhu</h1>
             {{-- table --}}
             <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
@@ -164,7 +165,9 @@
             </table>
             </div>
         </div>
-        <div class="flex flex-col w-full gap-y-5">
+       
+       {{-- 2 --}}
+        <div class="w-full flex flex-col gap-y-5">
             <h1 class="text-2xl font-bold text-black dark:text-white-color">Kelembapan</h1>
             {{-- table --}}
             <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">

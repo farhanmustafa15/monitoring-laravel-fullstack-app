@@ -3,12 +3,35 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use Illuminate\Http\Request;
 
 class FirebaseController extends Controller
 {
+    public function getData($dataType)
+    {
+        $client = new Client();
+        $url = env('FIREBASE_API_URL', '') . '/.json';
+
+        try {
+            $response = $client->get($url);
+            $data = json_decode($response->getBody(), true);
+
+            if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
+                return response()->json($data['TugasAkhir']['SetData']);
+            } elseif ($dataType === 'rumah-jamur' && isset($data['RumahJamur']['SetData'])) {
+                return response()->json($data['RumahJamur']['SetData']);
+            } else {
+                return response()->json(['error' => 'Data not found'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
+        }
+    }
+    // Dashboard
     public function showDashboard($dataType)
     {
+        // Set the dashboard type in the session
+        session(['dashboardType' => $dataType]);
+
         $client = new Client();
         $url = env('FIREBASE_API_URL', '') . '/.json';
 
@@ -46,9 +69,12 @@ class FirebaseController extends Controller
             return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
         }
     }
-
+    // Tugas Akhir DB
     public function showTugasAkhirDashboard()
     {
+        // Set the dashboard type in the session
+        session(['dashboardType' => 'tugas-akhir']);
+
         $client = new Client();
         $url = env('FIREBASE_API_URL', '') . '/.json';
 
@@ -71,9 +97,12 @@ class FirebaseController extends Controller
             return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
         }
     }
-
+    // Rumah Jamur DB
     public function showRumahJamurDashboard()
     {
+        // Set the dashboard type in the session
+        session(['dashboardType' => 'rumah-jamur']);
+
         $client = new Client();
         $url = env('FIREBASE_API_URL', '') . '/.json';
 

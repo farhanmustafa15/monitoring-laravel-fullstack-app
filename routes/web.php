@@ -14,14 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'admin/dashboard'], function () {
-    Route::get('/{dataType}', [FirebaseController::class, 'showDashboard']);
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('/dashboard/{dataType}', [FirebaseController::class, 'showDashboard']);
+    Route::get('/history', function () {
+        return view('history.history');
+    });
 });
 
 Route::get('/auth/login', function () {
     return view('auth.login');
-});
-
-Route::get('/admin/history', function () {
-    return view('history.history');
 });

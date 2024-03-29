@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/fetch-data', [FirebaseController::class, 'fetchDataJson']);
+Route::get('/data/{dataType}', [FirebaseController::class, 'getData']);

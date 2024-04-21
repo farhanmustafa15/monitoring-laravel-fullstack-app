@@ -97,76 +97,58 @@
                         placeholder="Search for items">
                 </div>
             </div>
-            
-            <div class="relative overflow-x-auto w-full ">
 
-            <table
-                class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
-                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            Product name
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Color
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Category
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Price
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="bg-white dark:bg-gray-800">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td class="px-6 py-4">
-                            Silver
-                        </td>
-                        <td class="px-6 py-4">
-                            Laptop
-                        </td>
-                        <td class="px-6 py-4">
-                            $2999
-                        </td>
-                    </tr>
-                    <tr class="bg-white dark:bg-gray-800">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Microsoft Surface Pro
-                        </th>
-                        <td class="px-6 py-4">
-                            White
-                        </td>
-                        <td class="px-6 py-4">
-                            Laptop PC
-                        </td>
-                        <td class="px-6 py-4">
-                            $1999
-                        </td>
-                    </tr>
-                    <tr class="bg-white dark:bg-gray-800">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">
-                            Black
-                        </td>
-                        <td class="px-6 py-4">
-                            Accessories
-                        </td>
-                        <td class="px-6 py-4">
-                            $99
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+            {{-- table --}}
+            <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">
+                <div class="relative overflow-x-auto">
+                    <table
+                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
+                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                            <tr class="grid grid-cols-2">
+                                <th scope="col" class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
+                                    <p
+                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                        Suhu
+                                    </p>
+                                </th>
+                                <th scope="col" class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
+                                    <p
+                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                        Hasil
+                                    </p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="grid grid-cols-2">
+                                <td
+                                    class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
+                                    <p
+                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                        @isset($tugasAkhirData['avgt'])
+                                            {{ $tugasAkhirData['avgt'] }}&#8451;
+                                        @endisset
+                                    </p>
+                                </td>
+                                <td
+                                    class="px-6 py-3 flex justify-center border-r border-b dark:border-gray-700 border-gray-200">
+                                    <div class="bg-blue-600 rounded-full w-min px-6 py-2">
+                                        <p
+                                            class="text-center font-medium text-base text-white-color whitespace-nowrap dark:text-white-color">
+                                            Rendah
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
         </div>
-       
-       {{-- 2 --}}
+
+        {{-- 2 --}}
         <div class="w-full flex flex-col gap-y-5">
             <h1 class="text-2xl font-bold text-black dark:text-white-color">Kelembapan</h1>
             {{-- table --}}
@@ -260,74 +242,55 @@
                 </div>
             </div>
 
-            <div class="relative overflow-x-auto w-full ">
-                <table
-                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
-                    <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Product name
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Color
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Category
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Price
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td class="px-6 py-4">
-                                Silver
-                            </td>
-                            <td class="px-6 py-4">
-                                Laptop
-                            </td>
-                            <td class="px-6 py-4">
-                                $2999
-                            </td>
-                        </tr>
-                        <tr class="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-                            <td class="px-6 py-4">
-                                Laptop PC
-                            </td>
-                            <td class="px-6 py-4">
-                                $1999
-                            </td>
-                        </tr>
-                        <tr class="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Magic Mouse 2
-                            </th>
-                            <td class="px-6 py-4">
-                                Black
-                            </td>
-                            <td class="px-6 py-4">
-                                Accessories
-                            </td>
-                            <td class="px-6 py-4">
-                                $99
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            {{-- table --}}
+            <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">
+                <div class="relative overflow-x-auto">
+                    <table
+                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
+                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                            <tr class="grid grid-cols-2">
+                                <th scope="col"
+                                    class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
+                                    <p
+                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                        Kelembapan
+                                    </p>
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
+                                    <p
+                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                        Hasil
+                                    </p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="grid grid-cols-2">
+                                <td
+                                    class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
+                                    <p
+                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                        @isset($rumahJamurData['avgh'])
+                                            {{ $rumahJamurData['avgh'] }}&#8451;
+                                        @endisset
+                                    </p>
+                                </td>
+                                <td
+                                    class="px-6 py-3 flex justify-center border-r border-b dark:border-gray-700 border-gray-200">
+                                    <div class="bg-blue-600 rounded-full w-min px-6 py-2">
+                                        <p
+                                            class="text-center font-medium text-base text-white-color whitespace-nowrap dark:text-white-color">
+                                            Rendah
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
         </div>
     </div>
 @endsection

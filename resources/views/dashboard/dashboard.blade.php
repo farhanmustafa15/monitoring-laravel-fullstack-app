@@ -52,7 +52,7 @@
                                 @isset($tugasAkhirData)
                                     @foreach ($tugasAkhirData as $key => $value)
                                         @if ($key === 'avgt')
-                                            {{ $value }}&#8451;
+                                            {{ $value }}&percnt;
                                         @endif
                                     @endforeach
                                 @endisset
@@ -60,7 +60,7 @@
                                 @isset($rumahJamurData)
                                     @foreach ($rumahJamurData as $key => $value)
                                         @if ($key === 'avgt')
-                                            {{ $value }}&#8451;
+                                            {{ $value }}&percnt;
                                         @endif
                                     @endforeach
                                 @endisset
@@ -85,7 +85,7 @@
                                 @isset($tugasAkhirData)
                                     @foreach ($tugasAkhirData as $key => $value)
                                         @if ($key === 'avgh')
-                                            {{ $value }}&#8451;
+                                            {{ $value }}&percnt;
                                         @endif
                                     @endforeach
                                 @endisset
@@ -93,7 +93,7 @@
                                 @isset($rumahJamurData)
                                     @foreach ($rumahJamurData as $key => $value)
                                         @if ($key === 'avgh')
-                                            {{ $value }}&#8451;
+                                            {{ $value }}&percnt;
                                         @endif
                                     @endforeach
                                 @endisset
@@ -156,7 +156,7 @@
                                                 @if ($key === 'avgt')
                                                     <p
                                                         class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&#8451;
+                                                        {{ $value }}&percnt;
                                                     </p>
                                                 @endif
                                             @endforeach
@@ -167,7 +167,7 @@
                                                 @if ($key === 'avgh')
                                                     <p
                                                         class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&#8451;
+                                                        {{ $value }}&percnt;
                                                     </p>
                                                 @endif
                                             @endforeach
@@ -181,7 +181,7 @@
                                                 @if ($key === 'avgt')
                                                     <p
                                                         class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&#8451;
+                                                        {{ $value }}&percnt;
                                                     </p>
                                                 @endif
                                             @endforeach
@@ -192,7 +192,7 @@
                                                 @if ($key === 'avgh')
                                                     <p
                                                         class="text-center font-mediu text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&#8451;
+                                                        {{ $value }}&percnt;
                                                     </p>
                                                 @endif
                                             @endforeach

@@ -12,7 +12,6 @@ class FirebaseController extends Controller
     // API JSON
     public function getData($dataType)
     {
-        // Fetch data from Firebase
         $client = new Client();
         $url = env('FIREBASE_API_URL', '') . '/.json';
 
@@ -20,7 +19,6 @@ class FirebaseController extends Controller
             $response = $client->get($url);
             $newData = json_decode($response->getBody(), true);
 
-            // Check if the new data is available
             if ($dataType === 'tugas-akhir' && isset($newData['TugasAkhir']['SetData'])) {
                 $newDataSet = $newData['TugasAkhir']['SetData'];
             } elseif ($dataType === 'rumah-jamur' && isset($newData['RumahJamur']['SetData'])) {
@@ -29,26 +27,20 @@ class FirebaseController extends Controller
                 return response()->json(['error' => 'Data not found'], 500);
             }
 
-            // Extract only 'avgh' and 'avgt' from the new data
             $extractedData = [
                 'avgh' => $newDataSet['avgh'],
                 'avgt' => $newDataSet['avgt']
             ];
 
-            // Fetch previously stored data from storage
             $fileName = $dataType . '.json';
             $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
 
-            // Get the highest ID from the stored data
             $maxId = count($storedData) > 0 ? max(array_keys($storedData)) : 0;
 
-            // Increment the ID for the new data
             $newId = $maxId + 1;
 
-            // Add the new data with the incremented ID
             $storedData[$newId] = $extractedData;
 
-            // Store the updated data back into storage
             Storage::put($fileName, json_encode($storedData));
 
             return response()->json($storedData);
@@ -60,7 +52,6 @@ class FirebaseController extends Controller
     // Dashboard
     public function showDashboard($dataType)
     {
-        // Set the dashboard type in the session
         session(['dashboardType' => $dataType]);
 
         $client = new Client();
@@ -70,21 +61,15 @@ class FirebaseController extends Controller
             $response = $client->get($url);
             $data = json_decode($response->getBody(), true);
 
-            // Check if the selected data type exists and has the expected structure
             if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
-                // Access all data within TugasAkhir
                 $tugasAkhirData = $data['TugasAkhir']['SetData'];
 
-                // Pass the TugasAkhir data to the view
                 return view('dashboard.dashboard', compact('tugasAkhirData'));
             } elseif ($dataType === 'rumah-jamur' && isset($data['RumahJamur']['SetData'])) {
-                // Access all data within RumahJamur
                 $rumahJamurData = $data['RumahJamur']['SetData'];
 
-                // Pass the RumahJamur data to the view
                 return view('dashboard.dashboard', compact('rumahJamurData'));
             } else {
-                // Handle case where data is not found
                 return response()->json(['error' => 'Data not found'], 500);
             }
             if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
@@ -100,10 +85,10 @@ class FirebaseController extends Controller
             return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
         }
     }
+
     // Tugas Akhir DB
     public function showTugasAkhirDashboard()
     {
-        // Set the dashboard type in the session
         session(['dashboardType' => 'tugas-akhir']);
 
         $client = new Client();
@@ -113,25 +98,21 @@ class FirebaseController extends Controller
             $response = $client->get($url);
             $data = json_decode($response->getBody(), true);
 
-            // Check if TugasAkhir data exists and has the expected structure
             if (isset($data['TugasAkhir']['SetData'])) {
-                // Access all data within TugasAkhir
                 $tugasAkhirData = $data['TugasAkhir']['SetData'];
 
-                // Pass the TugasAkhir data to the view
                 return view('dashboard.dashboard', compact('tugasAkhirData'));
             } else {
-                // Handle case where TugasAkhir data is not found
                 return response()->json(['error' => 'TugasAkhir data not found'], 500);
             }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
         }
     }
+
     // Rumah Jamur DB
     public function showRumahJamurDashboard()
     {
-        // Set the dashboard type in the session
         session(['dashboardType' => 'rumah-jamur']);
 
         $client = new Client();
@@ -141,15 +122,11 @@ class FirebaseController extends Controller
             $response = $client->get($url);
             $data = json_decode($response->getBody(), true);
 
-            // Check if RumahJamur data exists and has the expected structure
             if (isset($data['RumahJamur']['SetData'])) {
-                // Access all data within RumahJamur
                 $rumahJamurData = $data['RumahJamur']['SetData'];
 
-                // Pass the RumahJamur data to the view
                 return view('dashboard.dashboard', compact('rumahJamurData'));
             } else {
-                // Handle case where RumahJamur data is not found
                 return response()->json(['error' => 'RumahJamur data not found'], 500);
             }
         } catch (\Exception $e) {
@@ -157,34 +134,37 @@ class FirebaseController extends Controller
         }
     }
 
-    public function showHistory(Request $request, $dataType)
+    // History
+    public function showHistory($collection)
     {
         try {
-            // Determine the file name based on the data type
-            $fileName = $dataType . '.json';
+            $fileName = $collection . '.json';
+            $filePath = storage_path('app/' . $fileName);
 
-            // Fetch historical data from storage
-            $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
+            if (!file_exists($filePath)) {
+                return response()->json(['error' => 'File not found'], 500);
+            }
 
-            // Pass the historical data to the view
-            return view('history.history', compact('storedData', 'dataType'));
+            $jsonString = file_get_contents($filePath);
+            $data = json_decode($jsonString, true);
+
+            $avghData = [];
+            $avgtData = [];
+
+            // Get the 100 latest data points
+            $data = array_slice($data, -100, 100, true);
+
+            foreach ($data as $key => $value) {
+                if (isset($value['avgh']) && isset($value['avgt'])) {
+                    $avghData[$key] = $value['avgh'];
+                    $avgtData[$key] = $value['avgt'];
+                }
+            }
+
+            return view('history.history', compact('avghData', 'avgtData'));
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch historical data'], 500);
+            return response()->json(['error' => 'Failed to fetch data from JSON file'], 500);
         }
     }
 
-
-    // public function index()
-    // {
-    //     $rumahJamurData = $this->getDataFromJson('rumah-jamur.json');
-    //     $tugasAkhirData = $this->getDataFromJson('tugas-akhir.json');
-
-    //     return view('dashboard', compact('rumahJamurData', 'tugasAkhirData'));
-    // }
-
-    // private function getDataFromJson($fileName)
-    // {
-    //     $json = Storage::disk('local')->get($fileName);
-    //     return json_decode($json, true);
-    // }
 }

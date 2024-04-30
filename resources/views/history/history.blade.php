@@ -99,7 +99,7 @@
                                                     <div
                                                         class="py-1.5 w-full text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
 
-                                                        {{ $value }}&#x25;
+                                                        {{ $value }}&percnt;
 
                                                     </div>
                                                 @endforeach
@@ -177,7 +177,7 @@
                                                     <div
                                                         class="py-1.5 w-full text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
 
-                                                        {{ $value }}&#x25;
+                                                        {{ $value }}&percnt;
 
                                                     </div>
                                                 @endforeach

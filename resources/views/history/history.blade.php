@@ -1,296 +1,194 @@
-@extends('layout')
+    @extends('layout')
 
-@section('layout')
-    {{-- history --}}
-    <div class="pt-8 mx-6 grid grid-cols-2 gap-10 w-screen h-screen">
+    @section('layout')
+        {{-- History --}}
+        <div class="pt-8 mx-6 w-full h-screen">
 
-        {{-- 1 --}}
-        <div class="w-full flex flex-col gap-y-5">
-            <h1 class="text-2xl font-bold text-black dark:text-white-color">Suhu</h1>
-            {{-- table --}}
-            <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-                <div>
-                    <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio"
-                        class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                        type="button">
-                        <svg class="w-3 h-3 text-gray-500 dark:text-gray-400 me-3" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                        </svg>
-                        Last 30 days
-                        <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 4 4 4-4" />
-                        </svg>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="dropdownRadio"
-                        class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                        data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="top"
-                        style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(522.5px, 3847.5px, 0px);">
-                        <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownRadioButton">
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="filter-radio-example-1" type="radio" value="" name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-1"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        day</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input checked="" id="filter-radio-example-2" type="radio" value=""
-                                        name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-2"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        7 days</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="filter-radio-example-3" type="radio" value="" name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-3"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        30 days</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="filter-radio-example-4" type="radio" value="" name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-4"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        month</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="filter-radio-example-5" type="radio" value="" name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-5"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        year</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <label for="table-search" class="sr-only">Search</label>
-                <div class="relative">
-                    <div
-                        class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <input type="text" id="table-search"
-                        class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search for items">
+            {{-- Choose database --}}
+            <div class="flex justify-end px-6 mb-5">
+                <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm rounded-lg w-56 py-2.5 justify-center text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    type="button">Pilih Database<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 4 4 4-4" />
+                    </svg>
+                </button>
+
+                <!-- Dropdown menu -->
+                <div id="dropdown"
+                    class="z-10 hidden w-56 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                        <li>
+                            <a href="{{ url('/admin/history/rumah-jamur') }}"
+                                class="block text-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                Rumah Jamur</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('/admin/history/tugas-akhir') }}"
+                                class="block px-4 py-2 text-center hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Tugas
+                                Akhir</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
+            <div class="flex flex-col md:flex-row gap-10">
+                {{-- temperatur --}}
+                <div class="w-full h-[500px] flex flex-col gap-y-4">
+                    <h1 class="text-2xl font-bold text-black dark:text-white-color">Suhu</h1>
+                    {{-- Table --}}
+                    {{-- <div
+                        class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+                        <label for="table-search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
+                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <input type="text" id="table-search"
+                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Search for items">
+                        </div>
+                    </div> --}}
 
-            {{-- table --}}
-            <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">
-                <div class="relative overflow-x-auto">
-                    <table
-                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
-                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                            <tr class="grid grid-cols-2">
-                                <th scope="col" class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
-                                    <p
-                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                        Suhu
-                                    </p>
-                                </th>
-                                <th scope="col" class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
-                                    <p
-                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                        Hasil
-                                    </p>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="grid grid-cols-2">
-                                <td
-                                    class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                    <p
-                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                        @isset($tugasAkhirData['avgt'])
-                                            {{ $tugasAkhirData['avgt'] }}&#8451;
+                    <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">
+                        <div class="relative overflow-x-auto">
+                            <table
+                                class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
+                                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                                    <tr class="grid grid-cols-2">
+                                        <th scope="col"
+                                            class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200 bg-gray-100 dark:bg-gray-600">
+                                            <p
+                                                class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                ID</p>
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200 bg-gray-100 dark:bg-gray-600">
+                                            <p
+                                                class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                Suhu</p>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="grid grid-cols-2">
+
+                                        @isset($avgtData)
+                                            <td
+                                                class="px-6 py-3 flex flex-col bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 items-center justify-center">
+                                                @foreach ($avgtData as $key => $value)
+                                                    <div
+                                                        class="py-1.5 w-full text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+
+                                                        {{ $key }}
+                                                    </div>
+                                                @endforeach
+                                            </td>
                                         @endisset
-                                    </p>
-                                </td>
-                                <td
-                                    class="px-6 py-3 flex justify-center border-r border-b dark:border-gray-700 border-gray-200">
-                                    <div class="bg-blue-600 rounded-full w-min px-6 py-2">
-                                        <p
-                                            class="text-center font-medium text-base text-white-color whitespace-nowrap dark:text-white-color">
-                                            Rendah
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                                        @isset($avgtData)
+                                            <td
+                                                class="px-6 py-3 flex flex-col bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 items-center justify-center">
+                                                @foreach ($avgtData as $key => $value)
+                                                    <div
+                                                        class="py-1.5 w-full text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
 
-        </div>
+                                                        {{ $value }}&percnt;
 
-        {{-- 2 --}}
-        <div class="w-full flex flex-col gap-y-5">
-            <h1 class="text-2xl font-bold text-black dark:text-white-color">Kelembapan</h1>
-            {{-- table --}}
-            <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-                <div>
-                    <button id="dropdownRadioButton" data-dropdown-toggle="dropdownRadio"
-                        class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                        type="button">
-                        <svg class="w-3 h-3 text-gray-500 dark:text-gray-400 me-3" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
-                        </svg>
-                        Last 30 days
-                        <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 4 4 4-4" />
-                        </svg>
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="dropdownRadio"
-                        class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                        data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="top"
-                        style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate3d(522.5px, 3847.5px, 0px);">
-                        <ul class="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownRadioButton">
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="filter-radio-example-1" type="radio" value="" name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-1"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        day</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input checked="" id="filter-radio-example-2" type="radio" value=""
-                                        name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-2"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        7 days</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="filter-radio-example-3" type="radio" value="" name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-3"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        30 days</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="filter-radio-example-4" type="radio" value="" name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-4"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        month</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                    <input id="filter-radio-example-5" type="radio" value="" name="filter-radio"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="filter-radio-example-5"
-                                        class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">Last
-                                        year</label>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <label for="table-search" class="sr-only">Search</label>
-                <div class="relative">
-                    <div
-                        class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <input type="text" id="table-search"
-                        class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search for items">
-                </div>
-            </div>
-
-            {{-- table --}}
-            <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">
-                <div class="relative overflow-x-auto">
-                    <table
-                        class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
-                        <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
-                            <tr class="grid grid-cols-2">
-                                <th scope="col"
-                                    class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
-                                    <p
-                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                        Kelembapan
-                                    </p>
-                                </th>
-                                <th scope="col"
-                                    class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
-                                    <p
-                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                        Hasil
-                                    </p>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="grid grid-cols-2">
-                                <td
-                                    class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                    <p
-                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                        @isset($rumahJamurData['avgh'])
-                                            {{ $rumahJamurData['avgh'] }}&#8451;
+                                                    </div>
+                                                @endforeach
+                                            </td>
                                         @endisset
-                                    </p>
-                                </td>
-                                <td
-                                    class="px-6 py-3 flex justify-center border-r border-b dark:border-gray-700 border-gray-200">
-                                    <div class="bg-blue-600 rounded-full w-min px-6 py-2">
-                                        <p
-                                            class="text-center font-medium text-base text-white-color whitespace-nowrap dark:text-white-color">
-                                            Rendah
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- humidity --}}
+                <div class="w-full h-[500px] flex flex-col gap-y-4">
+                    <h1 class="text-2xl font-bold text-black dark:text-white-color">Kelembapan</h1>
+                    {{-- Table --}}
+                    {{-- <div
+                        class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+                        <label for="table-search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
+                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <input type="text" id="table-search"
+                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Search for items">
+                        </div>
+                    </div> --}}
+
+                    <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">
+                        <div class="relative overflow-x-auto">
+                            <table
+                                class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-600">
+                                <thead class="text-xs text-gray-900 uppercase dark:text-gray-400">
+                                    <tr class="grid grid-cols-2">
+                                        <th scope="col"
+                                            class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200 bg-gray-100 dark:bg-gray-600">
+                                            <p
+                                                class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                ID</p>
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200 bg-gray-100 dark:bg-gray-600">
+                                            <p
+                                                class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                Kelembapan</p>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="grid grid-cols-2">
+                                        @isset($avghData)
+                                            <td
+                                                class="px-6 py-3 flex flex-col bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 items-center justify-center">
+                                                @foreach ($avghData as $key => $value)
+                                                    <div
+                                                        class="py-1.5 w-full text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+
+                                                        {{ $key }}
+                                                    </div>
+                                                @endforeach
+                                            </td>
+                                        @endisset
+                                        @isset($avghData)
+                                            <td
+                                                class="px-6 py-3 flex flex-col bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 items-center justify-center">
+                                                @foreach ($avghData as $key => $value)
+                                                    <div
+                                                        class="py-1.5 w-full text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+
+                                                        {{ $value }}&percnt;
+
+                                                    </div>
+                                                @endforeach
+                                            </td>
+                                        @endisset
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </div>
-@endsection
+    @endsection

@@ -19,6 +19,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/history', function () {
         return view('history.history');
     });
+    // Route::get('/history/{dataType}', [FirebaseController::class, 'showHistory']);
+    Route::get('/history/{dataType}', [FirebaseController::class, 'showHistory']);
+    
 });
 
 Route::get('/auth/login', function () {

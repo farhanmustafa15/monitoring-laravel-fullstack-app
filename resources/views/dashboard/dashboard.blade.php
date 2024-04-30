@@ -35,78 +35,82 @@
 
         </div>
 
-        {{-- graph & avgh | avgt --}}
-        <div class="w-full h-80 flex justify-between px-6">
-            {{-- graph --}}
-            <canvas id="lineChart" width="500" height="200"></canvas>
-            {{-- temperature | humidity --}}
-            <div class="w-56 flex flex-col gap-y-4  ">
-                {{-- temperature --}}
-                <div class="flex flex-col w-full gap-y-2 border-blue-600 ">
-                    <h5 class="text-xl font-bold text-black dark:text-white-color">Suhu</h5>
-                    <div
-                        class="w-full h-fit bg-white-color dark:bg-gray-800 py-4 px-4 rounded-2xl border dark:border-gray-600 shadow-sm shadow-blue-600 dark:shadow-white">
-                        <div class="flex gap-4 justify-center items-center">
-                            <div class="dark:bg-gray-700 bg-gray-200 p-3 rounded-full">
-                                <img src="{{ asset('assets/dashboard/temperature.svg') }}" class="" alt="">
-                            </div>
-                            <div class="flex flex-col justify-center w-full">
-                                <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">suhu</p>
-                                <h5 class="text-black dark:text-white-color text-xl font-bold">
-                                    @isset($tugasAkhirData)
-                                        @foreach ($tugasAkhirData as $key => $value)
-                                            @if ($key === 'avgt')
-                                                {{ $value }}&#8451;
-                                            @endif
-                                        @endforeach
-                                    @endisset
-
-                                    @isset($rumahJamurData)
-                                        @foreach ($rumahJamurData as $key => $value)
-                                            @if ($key === 'avgt')
-                                                {{ $value }}&#8451;
-                                            @endif
-                                        @endforeach
-                                    @endisset
-                                </h5>
-                            </div>
+        {{-- temperature | humidity --}}
+        <div class="flex justify-between gap-x-4 px-6 mb-10">
+            {{-- temperature --}}
+            <div class="flex flex-col w-full gap-y-2 border-blue-600 ">
+                <h5 class="text-xl font-bold text-black dark:text-white-color">Suhu</h5>
+                <div
+                    class="w-full h-fit bg-white-color dark:bg-gray-800 py-4 px-4 rounded-2xl border dark:border-gray-600 shadow-sm shadow-blue-600 dark:shadow-white">
+                    <div class="flex gap-4 justify-center items-center">
+                        <div class="dark:bg-gray-700 bg-gray-200 p-3 rounded-full">
+                            <img src="{{ asset('assets/dashboard/temperature.svg') }}" class="" alt="">
                         </div>
-                    </div>
-                </div>
+                        <div class="flex flex-col justify-center w-full">
+                            <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">suhu</p>
+                            <h5 class="text-black dark:text-white-color text-xl font-bold">
+                                @isset($tugasAkhirData)
+                                    @foreach ($tugasAkhirData as $key => $value)
+                                        @if ($key === 'avgt')
+                                            {{ $value }}&percnt;
+                                        @endif
+                                    @endforeach
+                                @endisset
 
-                {{-- humidity --}}
-                <div class="flex flex-col w-full gap-y-2">
-                    <h5 class="text-xl font-bold text-black dark:text-white-color">Kelembapan</h5>
-                    <div
-                        class="w-full h-fit bg-white-color dark:bg-gray-800 py-4 px-4 rounded-2xl border dark:border-gray-600 shadow-sm shadow-blue-600 dark:shadow-white">
-                        <div class="flex gap-3 justify-center items-center">
-                            <div class="dark:bg-gray-700 bg-gray-200 p-3 rounded-full">
-                                <img src="{{ asset('assets/dashboard/humidity.svg') }}" alt="">
-                            </div>
-                            <div class="flex flex-col justify-center w-full">
-                                <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">Kelembapan</p>
-                                <h5 class="text-black dark:text-white-color text-xl font-bold">
-                                    @isset($tugasAkhirData)
-                                        @foreach ($tugasAkhirData as $key => $value)
-                                            @if ($key === 'avgh')
-                                                {{ $value }}&#8451;
-                                            @endif
-                                        @endforeach
-                                    @endisset
-
-                                    @isset($rumahJamurData)
-                                        @foreach ($rumahJamurData as $key => $value)
-                                            @if ($key === 'avgh')
-                                                {{ $value }}&#8451;
-                                            @endif
-                                        @endforeach
-                                    @endisset
-                                </h5>
-                            </div>
+                                @isset($rumahJamurData)
+                                    @foreach ($rumahJamurData as $key => $value)
+                                        @if ($key === 'avgt')
+                                            {{ $value }}&percnt;
+                                        @endif
+                                    @endforeach
+                                @endisset
+                            </h5>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {{-- humidity --}}
+            <div class="flex flex-col w-full gap-y-2">
+                <h5 class="text-xl font-bold text-black dark:text-white-color">Kelembapan</h5>
+                <div
+                    class="w-full h-fit bg-white-color dark:bg-gray-800 py-4 px-4 rounded-2xl border dark:border-gray-600 shadow-sm shadow-blue-600 dark:shadow-white">
+                    <div class="flex gap-3 justify-center items-center">
+                        <div class="dark:bg-gray-700 bg-gray-200 p-3 rounded-full">
+                            <img src="{{ asset('assets/dashboard/humidity.svg') }}" alt="">
+                        </div>
+                        <div class="flex flex-col justify-center w-full">
+                            <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">Kelembapan</p>
+                            <h5 class="text-black dark:text-white-color text-xl font-bold">
+                                @isset($tugasAkhirData)
+                                    @foreach ($tugasAkhirData as $key => $value)
+                                        @if ($key === 'avgh')
+                                            {{ $value }}&percnt;
+                                        @endif
+                                    @endforeach
+                                @endisset
+
+                                @isset($rumahJamurData)
+                                    @foreach ($rumahJamurData as $key => $value)
+                                        @if ($key === 'avgh')
+                                            {{ $value }}&percnt;
+                                        @endif
+                                    @endforeach
+                                @endisset
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {{-- graph & avgh | avgt --}}
+        <div class="w-full h-80 flex justify-between gap-x-4 px-6">
+            {{-- graph --}}
+            <canvas id="lineChartAvgt" width="330" height="200"></canvas>
+            <canvas id="lineChartAvgh" width="330" height="200"></canvas>
+
         </div>
 
         <div class="flex justify-between gap-20 p-4 md:p-6 mt-0">
@@ -152,7 +156,7 @@
                                                 @if ($key === 'avgt')
                                                     <p
                                                         class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&#8451;
+                                                        {{ $value }}&percnt;
                                                     </p>
                                                 @endif
                                             @endforeach
@@ -163,7 +167,7 @@
                                                 @if ($key === 'avgh')
                                                     <p
                                                         class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&#8451;
+                                                        {{ $value }}&percnt;
                                                     </p>
                                                 @endif
                                             @endforeach
@@ -177,7 +181,7 @@
                                                 @if ($key === 'avgt')
                                                     <p
                                                         class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&#8451;
+                                                        {{ $value }}&percnt;
                                                     </p>
                                                 @endif
                                             @endforeach
@@ -188,7 +192,7 @@
                                                 @if ($key === 'avgh')
                                                     <p
                                                         class="text-center font-mediu text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&#8451;
+                                                        {{ $value }}&percnt;
                                                     </p>
                                                 @endif
                                             @endforeach

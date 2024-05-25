@@ -53,37 +53,33 @@ class FirebaseController extends Controller
 
             // Get the three latest entries
             $latestData = array_slice($storedData, -3, 3, true);
-            $fuzzyResults = [];
-
-            foreach ($latestData as $key => $data) {
-                if (isset($data['avgt']) && isset($data['avgh'])) {
-                    Log::info('Evaluating fuzzy logic for data', ['avgt' => $data['avgt'], 'avgh' => $data['avgh']]);
-                    $fuzzyResults[$key] = $this->fuzzyLogic($data['avgt'], $data['avgh']);
-                } else {
-                    $fuzzyResults[$key] = 'Unknown'; // Handle missing keys
-                }
-            }
-
-            // Combine latest data and fuzzy results
-            $combinedResults = [];
-            foreach ($latestData as $key => $data) {
-                $combinedResults[$key] = [
-                    'avgh' => $data['avgh'],
-                    'avgt' => $data['avgt'],
-                    'fuzzyResult' => $fuzzyResults[$key] ?? 'Unknown'
-                ];
-            }
 
             // Save combined results to JSON file
             $resultFileName = $dataType . '_combined.json';
-            Storage::put($resultFileName, json_encode($combinedResults));
+            Storage::put($resultFileName, json_encode($latestData));
 
-            Log::info('Combined results:', $combinedResults);
+            Log::info('Latest data:', $latestData);
 
-            return view('dashboard.dashboard', compact('latestData', 'fuzzyResults', 'combinedResults', 'dataType'));
+            return view('dashboard.dashboard', compact('latestData', 'dataType'));
         } catch (\Exception $e) {
             Log::error('Failed to fetch data', ['exception' => $e]);
             return response()->json(['error' => 'Failed to fetch data'], 500);
+        }
+    }
+
+    public function showHistory($dataType)
+    {
+        try {
+            $fileName = $dataType . '.json';
+            $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
+
+            $avgtData = array_column($storedData, 'avgt');
+            $avghData = array_column($storedData, 'avgh');
+
+            return view('history.history', compact('avgtData', 'avghData', 'dataType'));
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch historical data', ['exception' => $e]);
+            return response()->json(['error' => 'Failed to fetch historical data'], 500);
         }
     }
 

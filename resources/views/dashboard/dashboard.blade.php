@@ -148,72 +148,48 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="grid grid-cols-3">
-                                    @isset($tugasAkhirData)
+                                @foreach ($latestData as $index => $data)
+                                    <tr class="grid grid-cols-3">
                                         <td
                                             class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                            @foreach ($tugasAkhirData as $key => $value)
-                                                @if ($key === 'avgt')
-                                                    <p
-                                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&percnt;
-                                                    </p>
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                        <td
-                                            class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                            @foreach ($tugasAkhirData as $key => $value)
-                                                @if ($key === 'avgh')
-                                                    <p
-                                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&percnt;
-                                                    </p>
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                    @endisset
-
-                                    @isset($rumahJamurData)
-                                        <td
-                                            class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                            @foreach ($rumahJamurData as $key => $value)
-                                                @if ($key === 'avgt')
-                                                    <p
-                                                        class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&percnt;
-                                                    </p>
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                        <td
-                                            class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                            @foreach ($rumahJamurData as $key => $value)
-                                                @if ($key === 'avgh')
-                                                    <p
-                                                        class="text-center font-mediu text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                        {{ $value }}&percnt;
-                                                    </p>
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                    @endisset
-
-                                    <td
-                                        class="px-6 py-3 flex justify-center border-r border-b dark:border-gray-700 border-gray-200">
-                                        <div class="bg-blue-600 rounded-full w-min px-6 py-2">
                                             <p
-                                                class="text-center font-medium text-base text-white-color whitespace-nowrap dark:text-white-color">
-                                                Rendah
+                                                class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                {{ $data['avgt'] ?? 'N/A' }}&percnt;
                                             </p>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td
+                                            class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
+                                            <p
+                                                class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                {{ $data['avgh'] ?? 'N/A' }}&percnt;
+                                            </p>
+                                        </td>
+                                        <td
+                                            class="px-6 py-3 flex justify-center border-r border-b dark:border-gray-700 border-gray-200">
+                                            <div class="bg-blue-600 rounded-full w-min px-6 py-2">
+                                                <p
+                                                    class="text-center font-medium text-base text-white-color whitespace-nowrap dark:text-white-color">
+                                                    {{ $fuzzyResults[$index] ?? 'Unknown' }}
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
+                        {{-- Debugging Section --}}
+                        {{-- <pre>
+                            {{ print_r($latestData) }}
+                            {{ print_r($fuzzyResults) }}
+                        </pre> --}}
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+
+
     </div>
 @endsection

@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class FirebaseController extends Controller
 {
-
-    // API JSON
     public function getData($dataType)
     {
         $client = new Client();
@@ -36,9 +34,7 @@ class FirebaseController extends Controller
             $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
 
             $maxId = count($storedData) > 0 ? max(array_keys($storedData)) : 0;
-
             $newId = $maxId + 1;
-
             $storedData[$newId] = $extractedData;
 
             Storage::put($fileName, json_encode($storedData));
@@ -49,122 +45,97 @@ class FirebaseController extends Controller
         }
     }
 
-    // Dashboard
     public function showDashboard($dataType)
     {
-        session(['dashboardType' => $dataType]);
-
-        $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
-
         try {
-            $response = $client->get($url);
-            $data = json_decode($response->getBody(), true);
+            $fileName = $dataType . '.json';
+            $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
 
-            if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
-                $tugasAkhirData = $data['TugasAkhir']['SetData'];
+            // Get the three latest entries
+            $latestData = array_slice($storedData, -3, 3, true);
+            $fuzzyResults = [];
 
-                return view('dashboard.dashboard', compact('tugasAkhirData'));
-            } elseif ($dataType === 'rumah-jamur' && isset($data['RumahJamur']['SetData'])) {
-                $rumahJamurData = $data['RumahJamur']['SetData'];
-
-                return view('dashboard.dashboard', compact('rumahJamurData'));
-            } else {
-                return response()->json(['error' => 'Data not found'], 500);
-            }
-            if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
-                $tugasAkhirData = $data['TugasAkhir']['SetData'];
-                return response()->json($tugasAkhirData);
-            } elseif ($dataType === 'rumah-jamur' && isset($data['RumahJamur']['SetData'])) {
-                $rumahJamurData = $data['RumahJamur']['SetData'];
-                return response()->json($rumahJamurData);
-            } else {
-                return response()->json(['error' => 'Data not found'], 500);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
-        }
-    }
-
-    // Tugas Akhir DB
-    public function showTugasAkhirDashboard()
-    {
-        session(['dashboardType' => 'tugas-akhir']);
-
-        $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
-
-        try {
-            $response = $client->get($url);
-            $data = json_decode($response->getBody(), true);
-
-            if (isset($data['TugasAkhir']['SetData'])) {
-                $tugasAkhirData = $data['TugasAkhir']['SetData'];
-
-                return view('dashboard.dashboard', compact('tugasAkhirData'));
-            } else {
-                return response()->json(['error' => 'TugasAkhir data not found'], 500);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
-        }
-    }
-
-    // Rumah Jamur DB
-    public function showRumahJamurDashboard()
-    {
-        session(['dashboardType' => 'rumah-jamur']);
-
-        $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
-
-        try {
-            $response = $client->get($url);
-            $data = json_decode($response->getBody(), true);
-
-            if (isset($data['RumahJamur']['SetData'])) {
-                $rumahJamurData = $data['RumahJamur']['SetData'];
-
-                return view('dashboard.dashboard', compact('rumahJamurData'));
-            } else {
-                return response()->json(['error' => 'RumahJamur data not found'], 500);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
-        }
-    }
-
-    // History
-    public function showHistory($collection)
-    {
-        try {
-            $fileName = $collection . '.json';
-            $filePath = storage_path('app/' . $fileName);
-
-            if (!file_exists($filePath)) {
-                return response()->json(['error' => 'File not found'], 500);
-            }
-
-            $jsonString = file_get_contents($filePath);
-            $data = json_decode($jsonString, true);
-
-            $avghData = [];
-            $avgtData = [];
-
-            // Get the 100 latest data points
-            $data = array_slice($data, -100, 100, true);
-
-            foreach ($data as $key => $value) {
-                if (isset($value['avgh']) && isset($value['avgt'])) {
-                    $avghData[$key] = $value['avgh'];
-                    $avgtData[$key] = $value['avgt'];
+            foreach ($latestData as $key => $data) {
+                if (isset($data['avgt']) && isset($data['avgh'])) {
+                    Log::info('Evaluating fuzzy logic for data', ['avgt' => $data['avgt'], 'avgh' => $data['avgh']]);
+                    $fuzzyResults[$key] = $this->fuzzyLogic($data['avgt'], $data['avgh']);
+                } else {
+                    $fuzzyResults[$key] = 'Unknown'; // Handle missing keys
                 }
             }
 
-            return view('history.history', compact('avghData', 'avgtData'));
+            // Combine latest data and fuzzy results
+            $combinedResults = [];
+            foreach ($latestData as $key => $data) {
+                $combinedResults[$key] = [
+                    'avgh' => $data['avgh'],
+                    'avgt' => $data['avgt'],
+                    'fuzzyResult' => $fuzzyResults[$key] ?? 'Unknown'
+                ];
+            }
+
+            // Save combined results to JSON file
+            $resultFileName = $dataType . '_combined.json';
+            Storage::put($resultFileName, json_encode($combinedResults));
+
+            Log::info('Combined results:', $combinedResults);
+
+            return view('dashboard.dashboard', compact('latestData', 'fuzzyResults', 'combinedResults', 'dataType'));
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch data from JSON file'], 500);
+            Log::error('Failed to fetch data', ['exception' => $e]);
+            return response()->json(['error' => 'Failed to fetch data'], 500);
         }
     }
 
+    private function fuzzyLogic($temperature, $humidity)
+    {
+        $tempCategory = $this->categorizeTemperature($temperature);
+        $humCategory = $this->categorizeHumidity($humidity);
+
+        Log::info('Categorized values', ['temperature' => $temperature, 'tempCategory' => $tempCategory, 'humidity' => $humidity, 'humCategory' => $humCategory]);
+
+        if ($tempCategory == 'Rendah' && $humCategory == 'Rendah') {
+            return 'Rendah';
+        } elseif ($tempCategory == 'Rendah' && $humCategory == 'Normal') {
+            return 'Rendah';
+        } elseif ($tempCategory == 'Rendah' && $humCategory == 'Tinggi') {
+            return 'Rendah';
+        } elseif ($tempCategory == 'Normal' && $humCategory == 'Rendah') {
+            return 'Rendah';
+        } elseif ($tempCategory == 'Normal' && $humCategory == 'Normal') {
+            return 'Normal';
+        } elseif ($tempCategory == 'Normal' && $humCategory == 'Tinggi') {
+            return 'Tinggi';
+        } elseif ($tempCategory == 'Tinggi' && $humCategory == 'Rendah') {
+            return 'Tinggi';
+        } elseif ($tempCategory == 'Tinggi' && $humCategory == 'Normal') {
+            return 'Tinggi';
+        } elseif ($tempCategory == 'Tinggi' && $humCategory == 'Tinggi') {
+            return 'Tinggi';
+        }
+
+        return 'Unknown';
+    }
+
+    private function categorizeTemperature($temperature)
+    {
+        if ($temperature < 20) {
+            return 'Rendah';
+        } elseif ($temperature <= 30) {
+            return 'Normal';
+        } else {
+            return 'Tinggi';
+        }
+    }
+
+    private function categorizeHumidity($humidity)
+    {
+        if ($humidity < 40) {
+            return 'Rendah';
+        } elseif ($humidity <= 60) {
+            return 'Normal';
+        } else {
+            return 'Tinggi';
+        }
+    }
 }

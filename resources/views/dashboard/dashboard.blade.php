@@ -167,10 +167,12 @@
                                             </td>
                                             <td
                                                 class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                                <p
-                                                    class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                    {{ $entry['fuzzyOutput'] }}
-                                                </p>
+                                                <div
+                                                    class="rounded-full w-40 px-2 py-2 @if ($entry['fuzzyOutput'] == 'Normal') bg-blue-600 text-white @elseif ($entry['fuzzyOutput'] == 'Low') bg-yellow-400 text-black @elseif ($entry['fuzzyOutput'] == 'High') bg-red-600 text-white @endif">
+                                                    <p class="text-center font-medium text-base text-white-color">
+                                                        {{ $entry['fuzzyOutput'] }}
+                                                    </p>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -181,6 +183,6 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 @endsection

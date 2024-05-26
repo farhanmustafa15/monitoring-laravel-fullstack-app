@@ -1,4 +1,3 @@
-// Avgt
 document.addEventListener("DOMContentLoaded", function () {
     var url = window.location.href;
     var dataType = url.split("/").pop();
@@ -8,15 +7,18 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
             var labels = [];
             var avgtData = [];
+            var avghData = [];
 
             Object.keys(data).forEach((key) => {
                 var item = data[key];
                 labels.push(key);
                 avgtData.push(item.avgt);
+                avghData.push(item.avgh);
             });
 
-            var ctx = document.getElementById("lineChartAvgt").getContext("2d");
-            var lineChart = new Chart(ctx, {
+            // Avgt Chart
+            var ctxAvgt = document.getElementById("lineChartAvgt").getContext("2d");
+            var lineChartAvgt = new Chart(ctxAvgt, {
                 type: "line",
                 data: {
                     labels: labels,
@@ -38,29 +40,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
                 },
             });
-        })
-        .catch((error) => console.error("Error:", error));
-});
 
-// Avgh
-document.addEventListener("DOMContentLoaded", function () {
-    var url = window.location.href;
-    var dataType = url.split("/").pop();
-
-    fetch("/api/data/" + dataType)
-        .then((response) => response.json())
-        .then((data) => {
-            var labels = [];
-            var avghData = [];
-
-            Object.keys(data).forEach((key) => {
-                var item = data[key];
-                labels.push(key);
-                avghData.push(item.avgh);
-            });
-
-            var ctx = document.getElementById("lineChartAvgh").getContext("2d");
-            var lineChart = new Chart(ctx, {
+            // Avgh Chart
+            var ctxAvgh = document.getElementById("lineChartAvgh").getContext("2d");
+            var lineChartAvgh = new Chart(ctxAvgh, {
                 type: "line",
                 data: {
                     labels: labels,

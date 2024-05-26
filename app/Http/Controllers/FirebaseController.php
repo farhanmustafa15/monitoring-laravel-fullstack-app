@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Storage;
 
 class FirebaseController extends Controller
 {
-
-    // API JSON
     public function getData($dataType)
     {
         $client = new Client();
@@ -29,16 +26,15 @@ class FirebaseController extends Controller
 
             $extractedData = [
                 'avgh' => $newDataSet['avgh'],
-                'avgt' => $newDataSet['avgt']
+                'avgt' => $newDataSet['avgt'],
+                'fuzzyOutput' => $this->fuzzyLogic($newDataSet['avgt'], $newDataSet['avgh'])
             ];
 
             $fileName = $dataType . '.json';
             $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
 
             $maxId = count($storedData) > 0 ? max(array_keys($storedData)) : 0;
-
             $newId = $maxId + 1;
-
             $storedData[$newId] = $extractedData;
 
             Storage::put($fileName, json_encode($storedData));
@@ -49,7 +45,6 @@ class FirebaseController extends Controller
         }
     }
 
-    // Dashboard
     public function showDashboard($dataType)
     {
         session(['dashboardType' => $dataType]);
@@ -63,21 +58,12 @@ class FirebaseController extends Controller
 
             if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
                 $tugasAkhirData = $data['TugasAkhir']['SetData'];
-
-                return view('dashboard.dashboard', compact('tugasAkhirData'));
+                $latestData = $this->getLatestData('tugas-akhir');
+                return view('dashboard.dashboard', compact('tugasAkhirData', 'latestData'));
             } elseif ($dataType === 'rumah-jamur' && isset($data['RumahJamur']['SetData'])) {
                 $rumahJamurData = $data['RumahJamur']['SetData'];
-
-                return view('dashboard.dashboard', compact('rumahJamurData'));
-            } else {
-                return response()->json(['error' => 'Data not found'], 500);
-            }
-            if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
-                $tugasAkhirData = $data['TugasAkhir']['SetData'];
-                return response()->json($tugasAkhirData);
-            } elseif ($dataType === 'rumah-jamur' && isset($data['RumahJamur']['SetData'])) {
-                $rumahJamurData = $data['RumahJamur']['SetData'];
-                return response()->json($rumahJamurData);
+                $latestData = $this->getLatestData('rumah-jamur');
+                return view('dashboard.dashboard', compact('rumahJamurData', 'latestData'));
             } else {
                 return response()->json(['error' => 'Data not found'], 500);
             }
@@ -86,59 +72,10 @@ class FirebaseController extends Controller
         }
     }
 
-    // Tugas Akhir DB
-    public function showTugasAkhirDashboard()
-    {
-        session(['dashboardType' => 'tugas-akhir']);
-
-        $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
-
-        try {
-            $response = $client->get($url);
-            $data = json_decode($response->getBody(), true);
-
-            if (isset($data['TugasAkhir']['SetData'])) {
-                $tugasAkhirData = $data['TugasAkhir']['SetData'];
-
-                return view('dashboard.dashboard', compact('tugasAkhirData'));
-            } else {
-                return response()->json(['error' => 'TugasAkhir data not found'], 500);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
-        }
-    }
-
-    // Rumah Jamur DB
-    public function showRumahJamurDashboard()
-    {
-        session(['dashboardType' => 'rumah-jamur']);
-
-        $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
-
-        try {
-            $response = $client->get($url);
-            $data = json_decode($response->getBody(), true);
-
-            if (isset($data['RumahJamur']['SetData'])) {
-                $rumahJamurData = $data['RumahJamur']['SetData'];
-
-                return view('dashboard.dashboard', compact('rumahJamurData'));
-            } else {
-                return response()->json(['error' => 'RumahJamur data not found'], 500);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
-        }
-    }
-
-    // History
-    public function showHistory($collection)
+    public function showHistory($dataType)
     {
         try {
-            $fileName = $collection . '.json';
+            $fileName = $dataType . '.json';
             $filePath = storage_path('app/' . $fileName);
 
             if (!file_exists($filePath)) {
@@ -148,23 +85,77 @@ class FirebaseController extends Controller
             $jsonString = file_get_contents($filePath);
             $data = json_decode($jsonString, true);
 
-            $avghData = [];
             $avgtData = [];
-
-            // Get the 100 latest data points
-            $data = array_slice($data, -100, 100, true);
+            $avghData = [];
 
             foreach ($data as $key => $value) {
                 if (isset($value['avgh']) && isset($value['avgt'])) {
-                    $avghData[$key] = $value['avgh'];
                     $avgtData[$key] = $value['avgt'];
+                    $avghData[$key] = $value['avgh'];
                 }
             }
 
-            return view('history.history', compact('avghData', 'avgtData'));
+            return view('history.history', compact('avgtData', 'avghData'));
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to fetch data from JSON file'], 500);
         }
     }
 
+    private function getLatestData($dataType)
+    {
+        $fileName = $dataType . '.json';
+        $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
+
+        // Get the latest 3 entries
+        $latestData = array_slice($storedData, -3, 3, true);
+
+        return $latestData;
+    }
+
+    // other methods ...
+
+    private function fuzzyLogic($temperature, $humidity)
+    {
+        // Define membership functions for temperature
+        $tempLow = max(0, min(1, (26 - $temperature) / 6));
+        $tempNormal = max(0, min(1, ($temperature - 26) / 4, (30 - $temperature) / 4));
+        $tempHigh = max(0, min(1, ($temperature - 30) / 10));
+
+        // Define membership functions for humidity
+        $humLow = max(0, min(1, (75 - $humidity) / 15));
+        $humNormal = max(0, min(1, ($humidity - 75) / 15, (90 - $humidity) / 15));
+        $humHigh = max(0, min(1, ($humidity - 90) / 10));
+
+        // Fuzzy Rules based on the provided table
+        $rules = [
+            'low_temp_low_hum' => min($tempLow, $humLow),
+            'low_temp_normal_hum' => min($tempLow, $humNormal),
+            'low_temp_high_hum' => min($tempLow, $humHigh),
+            'normal_temp_low_hum' => min($tempNormal, $humLow),
+            'normal_temp_normal_hum' => min($tempNormal, $humNormal),
+            'normal_temp_high_hum' => min($tempNormal, $humHigh),
+            'high_temp_low_hum' => min($tempHigh, $humLow),
+            'high_temp_normal_hum' => min($tempHigh, $humNormal),
+            'high_temp_high_hum' => min($tempHigh, $humHigh),
+        ];
+
+        // Output mapping
+        $outputs = [
+            'low_temp_low_hum' => 'Low',
+            'low_temp_normal_hum' => 'Low',
+            'low_temp_high_hum' => 'Low',
+            'normal_temp_low_hum' => 'Low',
+            'normal_temp_normal_hum' => 'Normal',
+            'normal_temp_high_hum' => 'High',
+            'high_temp_low_hum' => 'High',
+            'high_temp_normal_hum' => 'High',
+            'high_temp_high_hum' => 'High',
+        ];
+
+        // Defuzzification - Using maximum membership principle
+        $maxRule = array_keys($rules, max($rules));
+        $fuzzyOutput = $outputs[$maxRule[0]];
+
+        return $fuzzyOutput;
+    }
 }

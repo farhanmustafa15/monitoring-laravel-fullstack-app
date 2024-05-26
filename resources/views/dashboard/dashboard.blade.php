@@ -148,48 +148,39 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($latestData as $index => $data)
-                                    <tr class="grid grid-cols-3">
-                                        <td
-                                            class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                            <p
-                                                class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                {{ $data['avgt'] ?? 'N/A' }}&percnt;
-                                            </p>
-                                        </td>
-                                        <td
-                                            class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
-                                            <p
-                                                class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                {{ $data['avgh'] ?? 'N/A' }}&percnt;
-                                            </p>
-                                        </td>
-                                        <td
-                                            class="px-6 py-3 flex justify-center border-r border-b dark:border-gray-700 border-gray-200">
-                                            <div class="bg-blue-600 rounded-full w-min px-6 py-2">
+                                @isset($latestData)
+                                    @foreach ($latestData as $entry)
+                                        <tr class="grid grid-cols-3">
+                                            <td
+                                                class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
                                                 <p
-                                                    class="text-center font-medium text-base text-white-color whitespace-nowrap dark:text-white-color">
-                                                    {{ $fuzzyResults[$index] ?? 'Unknown' }}
+                                                    class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                    {{ $entry['avgt'] }}&percnt;
                                                 </p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                            </td>
+                                            <td
+                                                class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
+                                                <p
+                                                    class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                    {{ $entry['avgh'] }}&percnt;
+                                                </p>
+                                            </td>
+                                            <td
+                                                class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
+                                                <p
+                                                    class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
+                                                    {{ $entry['fuzzyOutput'] }}
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endisset
                             </tbody>
                         </table>
-                        {{-- Debugging Section --}}
-                        {{-- <pre>
-                            {{ print_r($latestData) }}
-                            {{ print_r($fuzzyResults) }}
-                        </pre> --}}
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-
-
+        
     </div>
 @endsection

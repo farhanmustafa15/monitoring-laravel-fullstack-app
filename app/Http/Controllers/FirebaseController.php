@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class FirebaseController extends Controller
@@ -27,7 +26,8 @@ class FirebaseController extends Controller
 
             $extractedData = [
                 'avgh' => $newDataSet['avgh'],
-                'avgt' => $newDataSet['avgt']
+                'avgt' => $newDataSet['avgt'],
+                'fuzzyOutput' => $this->fuzzyLogic($newDataSet['avgt'], $newDataSet['avgh'])
             ];
 
             $fileName = $dataType . '.json';
@@ -47,95 +47,115 @@ class FirebaseController extends Controller
 
     public function showDashboard($dataType)
     {
+        session(['dashboardType' => $dataType]);
+
+        $client = new Client();
+        $url = env('FIREBASE_API_URL', '') . '/.json';
+
+        try {
+            $response = $client->get($url);
+            $data = json_decode($response->getBody(), true);
+
+            if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
+                $tugasAkhirData = $data['TugasAkhir']['SetData'];
+                $latestData = $this->getLatestData('tugas-akhir');
+                return view('dashboard.dashboard', compact('tugasAkhirData', 'latestData'));
+            } elseif ($dataType === 'rumah-jamur' && isset($data['RumahJamur']['SetData'])) {
+                $rumahJamurData = $data['RumahJamur']['SetData'];
+                $latestData = $this->getLatestData('rumah-jamur');
+                return view('dashboard.dashboard', compact('rumahJamurData', 'latestData'));
+            } else {
+                return response()->json(['error' => 'Data not found'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
+        }
+    }
+
+    public function showHistory($dataType)
+    {
         try {
             $fileName = $dataType . '.json';
-            $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
+            $filePath = storage_path('app/' . $fileName);
 
-            // Get the three latest entries
-            $latestData = array_slice($storedData, -3, 3, true);
-            $fuzzyResults = [];
+            if (!file_exists($filePath)) {
+                return response()->json(['error' => 'File not found'], 500);
+            }
 
-            foreach ($latestData as $key => $data) {
-                if (isset($data['avgt']) && isset($data['avgh'])) {
-                    Log::info('Evaluating fuzzy logic for data', ['avgt' => $data['avgt'], 'avgh' => $data['avgh']]);
-                    $fuzzyResults[$key] = $this->fuzzyLogic($data['avgt'], $data['avgh']);
-                } else {
-                    $fuzzyResults[$key] = 'Unknown'; // Handle missing keys
+            $jsonString = file_get_contents($filePath);
+            $data = json_decode($jsonString, true);
+
+            $avgtData = [];
+            $avghData = [];
+
+            foreach ($data as $key => $value) {
+                if (isset($value['avgh']) && isset($value['avgt'])) {
+                    $avgtData[$key] = $value['avgt'];
+                    $avghData[$key] = $value['avgh'];
                 }
             }
 
-            // Combine latest data and fuzzy results
-            $combinedResults = [];
-            foreach ($latestData as $key => $data) {
-                $combinedResults[$key] = [
-                    'avgh' => $data['avgh'],
-                    'avgt' => $data['avgt'],
-                    'fuzzyResult' => $fuzzyResults[$key] ?? 'Unknown'
-                ];
-            }
-
-            // Save combined results to JSON file
-            $resultFileName = $dataType . '_combined.json';
-            Storage::put($resultFileName, json_encode($combinedResults));
-
-            Log::info('Combined results:', $combinedResults);
-
-            return view('dashboard.dashboard', compact('latestData', 'fuzzyResults', 'combinedResults', 'dataType'));
+            return view('history.history', compact('avgtData', 'avghData'));
         } catch (\Exception $e) {
-            Log::error('Failed to fetch data', ['exception' => $e]);
-            return response()->json(['error' => 'Failed to fetch data'], 500);
+            return response()->json(['error' => 'Failed to fetch data from JSON file'], 500);
         }
     }
+
+    private function getLatestData($dataType)
+    {
+        $fileName = $dataType . '.json';
+        $storedData = Storage::exists($fileName) ? json_decode(Storage::get($fileName), true) : [];
+
+        // Get the latest 3 entries
+        $latestData = array_slice($storedData, -3, 3, true);
+
+        return $latestData;
+    }
+
+    // other methods ...
 
     private function fuzzyLogic($temperature, $humidity)
     {
-        $tempCategory = $this->categorizeTemperature($temperature);
-        $humCategory = $this->categorizeHumidity($humidity);
+        // Define membership functions for temperature
+        $tempLow = max(0, min(1, (26 - $temperature) / 6));
+        $tempNormal = max(0, min(1, ($temperature - 26) / 4, (30 - $temperature) / 4));
+        $tempHigh = max(0, min(1, ($temperature - 30) / 10));
 
-        Log::info('Categorized values', ['temperature' => $temperature, 'tempCategory' => $tempCategory, 'humidity' => $humidity, 'humCategory' => $humCategory]);
+        // Define membership functions for humidity
+        $humLow = max(0, min(1, (75 - $humidity) / 15));
+        $humNormal = max(0, min(1, ($humidity - 75) / 15, (90 - $humidity) / 15));
+        $humHigh = max(0, min(1, ($humidity - 90) / 10));
 
-        if ($tempCategory == 'Rendah' && $humCategory == 'Rendah') {
-            return 'Rendah';
-        } elseif ($tempCategory == 'Rendah' && $humCategory == 'Normal') {
-            return 'Rendah';
-        } elseif ($tempCategory == 'Rendah' && $humCategory == 'Tinggi') {
-            return 'Rendah';
-        } elseif ($tempCategory == 'Normal' && $humCategory == 'Rendah') {
-            return 'Rendah';
-        } elseif ($tempCategory == 'Normal' && $humCategory == 'Normal') {
-            return 'Normal';
-        } elseif ($tempCategory == 'Normal' && $humCategory == 'Tinggi') {
-            return 'Tinggi';
-        } elseif ($tempCategory == 'Tinggi' && $humCategory == 'Rendah') {
-            return 'Tinggi';
-        } elseif ($tempCategory == 'Tinggi' && $humCategory == 'Normal') {
-            return 'Tinggi';
-        } elseif ($tempCategory == 'Tinggi' && $humCategory == 'Tinggi') {
-            return 'Tinggi';
-        }
+        // Fuzzy Rules based on the provided table
+        $rules = [
+            'low_temp_low_hum' => min($tempLow, $humLow),
+            'low_temp_normal_hum' => min($tempLow, $humNormal),
+            'low_temp_high_hum' => min($tempLow, $humHigh),
+            'normal_temp_low_hum' => min($tempNormal, $humLow),
+            'normal_temp_normal_hum' => min($tempNormal, $humNormal),
+            'normal_temp_high_hum' => min($tempNormal, $humHigh),
+            'high_temp_low_hum' => min($tempHigh, $humLow),
+            'high_temp_normal_hum' => min($tempHigh, $humNormal),
+            'high_temp_high_hum' => min($tempHigh, $humHigh),
+        ];
 
-        return 'Unknown';
-    }
+        // Output mapping
+        $outputs = [
+            'low_temp_low_hum' => 'Low',
+            'low_temp_normal_hum' => 'Low',
+            'low_temp_high_hum' => 'Low',
+            'normal_temp_low_hum' => 'Low',
+            'normal_temp_normal_hum' => 'Normal',
+            'normal_temp_high_hum' => 'High',
+            'high_temp_low_hum' => 'High',
+            'high_temp_normal_hum' => 'High',
+            'high_temp_high_hum' => 'High',
+        ];
 
-    private function categorizeTemperature($temperature)
-    {
-        if ($temperature < 20) {
-            return 'Rendah';
-        } elseif ($temperature <= 30) {
-            return 'Normal';
-        } else {
-            return 'Tinggi';
-        }
-    }
+        // Defuzzification - Using maximum membership principle
+        $maxRule = array_keys($rules, max($rules));
+        $fuzzyOutput = $outputs[$maxRule[0]];
 
-    private function categorizeHumidity($humidity)
-    {
-        if ($humidity < 40) {
-            return 'Rendah';
-        } elseif ($humidity <= 60) {
-            return 'Normal';
-        } else {
-            return 'Tinggi';
-        }
+        return $fuzzyOutput;
     }
 }

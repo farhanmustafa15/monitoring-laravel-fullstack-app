@@ -16,9 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/dashboard/{dataType}', [FirebaseController::class, 'showDashboard']);
-    Route::get('/history', function () {
-        return view('history.history');
-    });
     Route::get('/history/{dataType}', [FirebaseController::class, 'showHistory']);
 });
 

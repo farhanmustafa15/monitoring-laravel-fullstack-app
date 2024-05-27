@@ -2,10 +2,10 @@
 
 @section('layout')
     {{-- History --}}
-    <div class="pt-8 mx-6 w-full h-screen">
+    <div class="pt-8 w-full h-full">
 
         {{-- Choose database --}}
-        <div class="flex justify-end px-6 mb-5">
+        <div class="flex justify-end mb-5">
             <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm rounded-lg w-56 py-2.5 justify-center text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 type="button">Pilih Database<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -33,9 +33,9 @@
             </div>
         </div>
 
-        <div class="flex flex-col md:flex-row gap-10">
+        <div class="flex px-6 flex-col md:flex-row gap-10">
             {{-- temperature --}}
-            <div class="w-full h-[500px] flex flex-col gap-y-4">
+            <div class="w-full h-[450px] flex flex-col gap-y-4">
                 <h1 class="text-2xl font-bold text-black dark:text-white-color">Suhu</h1>
 
                 <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">
@@ -86,7 +86,7 @@
             </div>
 
             {{-- humidity --}}
-            <div class="w-full h-[500px] flex flex-col gap-y-4">
+            <div class="w-full h-[450px] flex flex-col gap-y-4">
                 <h1 class="text-2xl font-bold text-black dark:text-white-color">Kelembapan</h1>
 
                 <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">

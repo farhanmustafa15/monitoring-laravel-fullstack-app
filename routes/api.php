@@ -19,5 +19,5 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-// // Route::get('/fetch-data', [FirebaseController::class, 'fetchDataJson']);
 Route::get('/data/{dataType}', [FirebaseController::class, 'getData']);
+Route::get('/fetch-data', [FirebaseController::class, 'fetchData']);

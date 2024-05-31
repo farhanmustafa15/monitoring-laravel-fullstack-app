@@ -4,13 +4,34 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
+use Kreait\Firebase\Factory;
 
 class FirebaseController extends Controller
 {
+    protected $database;
+
+    public function __construct()
+    {
+        $firebase = (new Factory)
+            ->withServiceAccount(config('firebase.credentials_file'))
+            ->withDatabaseUri('https://finalproject-87a3e.firebaseio.com');
+
+        $this->database = $firebase->createDatabase();
+    }
+
+    public function fetchData($path)
+    {
+        $reference = $this->database->getReference($path);
+        $snapshot = $reference->getSnapshot();
+        $value = $snapshot->getValue();
+
+        return response()->json($value);
+    }
+
     public function getData($dataType)
     {
         $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
+        $url = env('FIREBASE_DATABASE_URL', '') . '/.json';
 
         try {
             $response = $client->get($url);
@@ -50,7 +71,7 @@ class FirebaseController extends Controller
         session(['dashboardType' => $dataType]);
 
         $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
+        $url = env('FIREBASE_DATABASE_URL', '') . '/.json';
 
         try {
             $response = $client->get($url);
@@ -123,7 +144,7 @@ class FirebaseController extends Controller
 
         // Define membership functions for humidity
         $humLow = max(0, min(1, (75 - $humidity) / 15));
-        $humNormal = max(0, min(1, ($humidity - 75) / 15, (90 - $humidity) / 15));
+        $humNormal = max(0, min(1, ($humidity - 74) / 15, (91 - $humidity) / 15));
         $humHigh = max(0, min(1, ($humidity - 90) / 10));
 
         // Fuzzy Rules based on the provided table

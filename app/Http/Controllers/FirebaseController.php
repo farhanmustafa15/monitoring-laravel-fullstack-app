@@ -9,17 +9,22 @@ use Kreait\Firebase\Factory;
 
 class FirebaseController extends Controller
 {
+    // TEST
     protected $database;
 
     public function __construct()
     {
         try {
-            $credentialsFile = config('services.firebase.credentials_file');
-            $databaseUrl = config('services.firebase.database_url');
-
-            if (!file_exists($credentialsFile)) {
-                throw new \Exception("Firebase credentials file not found: {$credentialsFile}");
+            $credentialsBase64 = env('FIREBASE_CREDENTIALS_JSON');
+            if (!$credentialsBase64) {
+                throw new \Exception('Firebase credentials are not set in environment variables');
             }
+
+            $credentialsJson = base64_decode($credentialsBase64);
+            $credentialsFile = sys_get_temp_dir() . '/firebase-credentials.json';
+            file_put_contents($credentialsFile, $credentialsJson);
+
+            $databaseUrl = env('FIREBASE_DATABASE_URL', '');
 
             $firebase = (new Factory)
                 ->withServiceAccount($credentialsFile)

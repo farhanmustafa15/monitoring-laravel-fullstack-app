@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Kreait\Firebase\Factory;
 
@@ -12,21 +13,39 @@ class FirebaseController extends Controller
 
     public function __construct()
     {
-        $firebase = (new Factory)
-            ->withServiceAccount(config('firebase.credentials_file'))
-            ->withDatabaseUri('https://finalproject-87a3e.firebaseio.com');
+        try {
+            $credentialsFile = config('services.firebase.credentials_file');
+            $databaseUrl = config('services.firebase.database_url');
 
-        $this->database = $firebase->createDatabase();
+            if (!file_exists($credentialsFile)) {
+                throw new \Exception("Firebase credentials file not found: {$credentialsFile}");
+            }
+
+            $firebase = (new Factory)
+                ->withServiceAccount($credentialsFile)
+                ->withDatabaseUri($databaseUrl);
+
+            $this->database = $firebase->createDatabase();
+        } catch (\Exception $e) {
+            Log::error('Failed to initialize Firebase: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function fetchData($path)
     {
-        $reference = $this->database->getReference($path);
-        $snapshot = $reference->getSnapshot();
-        $value = $snapshot->getValue();
+        try {
+            $reference = $this->database->getReference($path);
+            $snapshot = $reference->getSnapshot();
+            $value = $snapshot->getValue();
 
-        return response()->json($value);
+            return response()->json($value);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch data from Firebase: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
+        }
     }
+
 
     public function getData($dataType)
     {

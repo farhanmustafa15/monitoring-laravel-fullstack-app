@@ -22,8 +22,8 @@
                 </a>
             </li>
             <li>
-                <a href='/admin/history/tugas-akhir'
-                    class="flex items-center px-6 py-3 {{ request()->is('admin/history/tugas-akhir') ? 'text-white bg-blue-700' : 'text-gray-700 hover:text-white' }} rounded-lg dark:text-white hover:bg-gray-400 dark:hover:bg-gray-700 group-hover:text-gray-900">
+                <a href='/admin/history/rumah-jamur'
+                    class="flex items-center px-6 py-3 {{ request()->is('admin/history/rumah-jamur') ? 'text-white bg-blue-700' : 'text-gray-700 hover:text-white' }} rounded-lg dark:text-white hover:bg-gray-400 dark:hover:bg-gray-700 group-hover:text-gray-900">
                     {{-- svg --}}
                     <svg class="w-5 h-5 transition duration-75 {{ request()->is('admin/history') ? 'text-white' : 'text-gray-500 hover:text-white' }} transition duration-75 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">

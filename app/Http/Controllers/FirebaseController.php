@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Firebases;
 use App\Services\FuzzificationTempServices as ServicesFuzzificationTempServices;
 use App\Services\FuzzificationHumServices as ServicesFuzzificationHumServices;
 use FuzzificationServices;
@@ -11,14 +12,20 @@ use Illuminate\Support\Facades\Storage;
 class FirebaseController extends Controller
 {
 
+    private $firebase;
+
+    public function __construct(Firebases $firebase)
+    {
+        $this->firebase = $firebase;
+    }
+
     public function getData($dataType)
     {
-        $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
+        $database = $this->firebase->getDatabase();
+        $reference = $database->getReference('/');
 
         try {
-            $response = $client->get($url);
-            $newData = json_decode($response->getBody(), true);
+            $newData = $reference->getValue();
 
             if ($dataType === 'tugas-akhir' && isset($newData['TugasAkhir']['SetData'])) {
                 $newDataSet = $newData['TugasAkhir']['SetData'];
@@ -53,12 +60,11 @@ class FirebaseController extends Controller
     {
         session(['dashboardType' => $dataType]);
 
-        $client = new Client();
-        $url = env('FIREBASE_API_URL', '') . '/.json';
+        $database = $this->firebase->getDatabase();
+        $reference = $database->getReference('/');
 
         try {
-            $response = $client->get($url);
-            $data = json_decode($response->getBody(), true);
+            $data = $reference->getValue();
 
             if ($dataType === 'tugas-akhir' && isset($data['TugasAkhir']['SetData'])) {
                 $tugasAkhirData = $data['TugasAkhir']['SetData'];
@@ -115,6 +121,7 @@ class FirebaseController extends Controller
 
         return $latestData;
     }
+
 
     // Fuzzy Methods
 

@@ -52,7 +52,7 @@
                                 @isset($tugasAkhirData)
                                     @foreach ($tugasAkhirData as $key => $value)
                                         @if ($key === 'avgt')
-                                            {{ $value }}&percnt;
+                                            {{ $value }}&deg;C
                                         @endif
                                     @endforeach
                                 @endisset
@@ -60,7 +60,7 @@
                                 @isset($rumahJamurData)
                                     @foreach ($rumahJamurData as $key => $value)
                                         @if ($key === 'avgt')
-                                            {{ $value }}&percnt;
+                                            {{ $value }}&deg;C
                                         @endif
                                     @endforeach
                                 @endisset
@@ -72,7 +72,7 @@
 
             {{-- humidity --}}
             <div class="flex flex-col w-full gap-y-2">
-                <h5 class="text-xl font-bold text-black dark:text-white-color">Kelembapan</h5>
+                <h5 class="text-xl font-bold text-black dark:text-white-color">Kelembaban</h5>
                 <div
                     class="w-full h-fit bg-white-color dark:bg-gray-800 py-4 px-4 rounded-2xl border dark:border-gray-600 shadow-sm shadow-blue-600 dark:shadow-white">
                     <div class="flex gap-3 justify-center items-center">
@@ -80,7 +80,7 @@
                             <img src="{{ asset('assets/dashboard/humidity.svg') }}" alt="">
                         </div>
                         <div class="flex flex-col justify-center w-full">
-                            <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">Kelembapan</p>
+                            <p class="text-[##93A3AB] font-medium text-black dark:text-white-color">Kelembaban</p>
                             <h5 class="text-black dark:text-white-color text-xl font-bold">
                                 @isset($tugasAkhirData)
                                     @foreach ($tugasAkhirData as $key => $value)
@@ -135,7 +135,7 @@
                                         class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200">
                                         <p
                                             class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                            Kelembapan
+                                            Kelembaban
                                         </p>
                                     </th>
                                     <th scope="col"
@@ -155,7 +155,7 @@
                                                 class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
                                                 <p
                                                     class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                    {{ $entry['avgt'] }}&percnt;
+                                                    {{ $entry['avgt'] }}&deg;C
                                                 </p>
                                             </td>
                                             <td

@@ -23,7 +23,7 @@
                 </svg>
 
                 <span
-                    class="self-center text-xl font-semibold sm:text-2xl text-blue-600 dark:text-white">Mentoring</span>
+                    class="self-center text-xl font-semibold sm:text-2xl text-blue-600 dark:text-white">Monitoring</span>
             </a>
 
             {{-- dark | light mode --}}

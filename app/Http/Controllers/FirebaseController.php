@@ -2,60 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\FuzzificationTempServices as ServicesFuzzificationTempServices;
+use App\Services\FuzzificationHumServices as ServicesFuzzificationHumServices;
+use FuzzificationServices;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Kreait\Firebase\Factory;
 
 class FirebaseController extends Controller
 {
-    // TEST
-    protected $database;
-
-    public function __construct()
-    {
-        try {
-            $credentialsBase64 = env('FIREBASE_CREDENTIALS_JSON');
-            if (!$credentialsBase64) {
-                throw new \Exception('Firebase credentials are not set in environment variables');
-            }
-
-            $credentialsJson = base64_decode($credentialsBase64);
-            $credentialsFile = sys_get_temp_dir() . '/firebase-credentials.json';
-            file_put_contents($credentialsFile, $credentialsJson);
-
-            $databaseUrl = env('FIREBASE_DATABASE_URL', '');
-
-            $firebase = (new Factory)
-                ->withServiceAccount($credentialsFile)
-                ->withDatabaseUri($databaseUrl);
-
-            $this->database = $firebase->createDatabase();
-        } catch (\Exception $e) {
-            Log::error('Failed to initialize Firebase: ' . $e->getMessage());
-            throw $e;
-        }
-    }
-
-    public function fetchData($path)
-    {
-        try {
-            $reference = $this->database->getReference($path);
-            $snapshot = $reference->getSnapshot();
-            $value = $snapshot->getValue();
-
-            return response()->json($value);
-        } catch (\Exception $e) {
-            Log::error('Failed to fetch data from Firebase: ' . $e->getMessage());
-            return response()->json(['error' => 'Failed to fetch data from Firebase'], 500);
-        }
-    }
-
 
     public function getData($dataType)
     {
         $client = new Client();
-        $url = env('FIREBASE_DATABASE_URL', '') . '/.json';
+        $url = env('FIREBASE_API_URL', '') . '/.json';
 
         try {
             $response = $client->get($url);
@@ -95,7 +54,7 @@ class FirebaseController extends Controller
         session(['dashboardType' => $dataType]);
 
         $client = new Client();
-        $url = env('FIREBASE_DATABASE_URL', '') . '/.json';
+        $url = env('FIREBASE_API_URL', '') . '/.json';
 
         try {
             $response = $client->get($url);
@@ -157,21 +116,25 @@ class FirebaseController extends Controller
         return $latestData;
     }
 
-    // other methods ...
+    // Fuzzy Methods
 
     private function fuzzyLogic($temperature, $humidity)
     {
-        // Define membership functions for temperature
-        $tempLow = max(0, min(1, (26 - $temperature) / 6));
-        $tempNormal = max(0, min(1, ($temperature - 26) / 4, (30 - $temperature) / 4));
-        $tempHigh = max(0, min(1, ($temperature - 30) / 10));
+        // TEMPERATURE
+        $fuzzificationTempServices = new ServicesFuzzificationTempServices();
 
-        // Define membership functions for humidity
-        $humLow = max(0, min(1, (75 - $humidity) / 15));
-        $humNormal = max(0, min(1, ($humidity - 74) / 15, (91 - $humidity) / 15));
-        $humHigh = max(0, min(1, ($humidity - 90) / 10));
+        $tempLow = $fuzzificationTempServices->muLowTemp($temperature);
+        $tempNormal = $fuzzificationTempServices->muMediumTemp($temperature);
+        $tempHigh = $fuzzificationTempServices->muHighTemp($temperature);
 
-        // Fuzzy Rules based on the provided table
+        // HUMIDITY
+        $fuzzificationHumServices = new ServicesFuzzificationHumServices();
+
+        $humLow = $fuzzificationHumServices->muLowHum($humidity);
+        $humNormal = $fuzzificationHumServices->muMediumHum($humidity);
+        $humHigh = $fuzzificationHumServices->muHighHum($humidity);
+
+        // Rules
         $rules = [
             'low_temp_low_hum' => min($tempLow, $humLow),
             'low_temp_normal_hum' => min($tempLow, $humNormal),

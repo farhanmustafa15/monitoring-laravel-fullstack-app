@@ -73,7 +73,7 @@
                                                 class="px-6 py-3 bg-white dark:bg-gray-800 border-r border-b dark:border-gray-700 border-gray-200 flex items-center justify-center">
                                                 <p
                                                     class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                                    {{ $value }}&percnt;
+                                                    {{ $value }}&deg;C
                                                 </p>
                                             </td>
                                         </tr>
@@ -87,7 +87,7 @@
 
             {{-- humidity --}}
             <div class="w-full h-[450px] flex flex-col gap-y-4">
-                <h1 class="text-2xl font-bold text-black dark:text-white-color">Kelembapan</h1>
+                <h1 class="text-2xl font-bold text-black dark:text-white-color">Kelembaban</h1>
 
                 <div class="relative overflow-x-auto sm:rounded-lg w-full shadow-sm shadow-blue-600 dark:shadow-white">
                     <div class="relative overflow-x-auto">
@@ -105,7 +105,7 @@
                                         class="px-6 py-3 border-r border-b dark:border-gray-700 border-gray-200 bg-gray-100 dark:bg-gray-600">
                                         <p
                                             class="text-center font-medium text-base text-gray-900 whitespace-nowrap dark:text-white-color">
-                                            Kelembapan</p>
+                                            Kelembaban</p>
                                     </th>
                                 </tr>
                             </thead>

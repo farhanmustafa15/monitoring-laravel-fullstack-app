@@ -19,12 +19,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/history/{dataType}', [FirebaseController::class, 'showHistory']);
 });
 
-Route::get('/firebase/{path}', [FirebaseController::class, 'getData']);
-
 Route::get('/auth/login', function () {
     return view('auth.login');
-});
-
-Route::get('/', function () {
-    return view('welcome');
 });
